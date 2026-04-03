@@ -1,0 +1,239 @@
+
+{/**/}
+<nav className="fixed top-0 w-full z-50 bg-neutral-950/70 backdrop-blur-xl shadow-[0_0_20px_rgba(255,122,251,0.1)]">
+<div className="flex justify-between items-center px-8 py-4 w-full max-w-full">
+<div className="text-2xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-[#ff7afb] to-[#00fbfb] font-headline">
+                NEON_HORIZON
+            </div>
+<div className="hidden md:flex items-center gap-8 font-headline tracking-tight">
+<a className="text-[#00fbfb] relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-0.5 after:bg-[#00fbfb] after:shadow-[0_0_8px_#00fbfb]" href="#">Home</a>
+<a className="text-neutral-400 hover:text-neutral-100 transition-colors" href="#">Manga</a>
+<a className="text-neutral-400 hover:text-neutral-100 transition-colors" href="#">Fan Art</a>
+<a className="text-neutral-400 hover:text-neutral-100 transition-colors" href="#">Videos</a>
+</div>
+<div className="flex items-center gap-6">
+<div className="relative hidden lg:block">
+<input className="bg-surface-container-lowest border-none rounded-full px-6 py-2 text-sm w-64 focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="Search the multiverse..." type="text"/>
+</div>
+<button className="material-symbols-outlined text-neutral-400 hover:text-primary transition-all">notifications</button>
+<div className="h-10 w-10 rounded-full overflow-hidden border border-primary/20">
+<img alt="User Profile Avatar" className="w-full h-full object-cover" data-alt="Stylized cyber-punk anime portrait with glowing magenta eyes and dark futuristic attire" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmHxfNli6XM1YQSTpTFGTJIyVYUC_TVkdvumAPn_Do7J6IU0QgviImTfndK73dfU6opJw7j-e4sZYvq7s53Bct84Ae14-7CjWQiEALRInPe-j59SWYcm8njDJisH96OEDfGjyRstc4wc_nvsJJ7t2Hylw9BR7nrofkJg6ffRdOsbA4B5ZjaSDyXC65DTI3_sOSx8d4qovaM1TW1HLz58PnAm1HqZ362SFmFxCFabfN8V5eS8unzgoqHa_mL_RKl58GKLpC_S1SfR1J"/>
+</div>
+</div>
+</div>
+</nav>
+{/**/}
+<section className="relative h-screen w-full overflow-hidden flex items-center pt-20">
+<div className="absolute inset-0 z-0">
+<img className="w-full h-full object-cover opacity-60 scale-105" data-alt="Dramatic silhouette of a lone anime warrior overlooking a sprawling futuristic Tokyo at night with purple and teal neon lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaC19CoKqiZaNcQMHCdDjsIwdBROfFcQC1o_Cr9PkarKZlyjWFLOi48JlXeIMyot9YqZlaCxJplJyxXxMNqlv6_N0eTLTLMi5g586aFmDXyTSERZVNvYx4zzATG4te2dJSRlGsyaGYa9wv5GEblesWKIOnCkXpkM-CvsFx5eX0ceKnT1wFL88sL8qErGpG5O6O4eRX_NBcR_6V4muo_FKHvt_nLELTdfmM8nMxFnHDm17JnuHQzHlQnU9i6VTSGU-w6Z7XVueS149d"/>
+<div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/40 to-transparent"></div>
+<div className="absolute inset-0 bg-gradient-to-r from-surface via-transparent to-surface/20"></div>
+</div>
+<div className="relative z-10 px-8 md:px-20 max-w-5xl">
+<h4 className="text-primary font-headline uppercase tracking-[0.4em] text-sm mb-4">The Horizon Awaits</h4>
+<h1 className="text-7xl md:text-9xl font-headline font-bold leading-tight mb-8 tracking-tighter">
+                Welcome to the <br/>
+<span className="neon-gradient-text">Anime Universe.</span>
+</h1>
+<p className="text-on-surface-variant text-lg md:text-xl max-w-xl mb-12 font-light leading-relaxed">
+                Step into a world where high-fidelity art meets cinematic storytelling. Experience the next generation of manga and fan culture.
+            </p>
+<div className="flex flex-wrap gap-6">
+<button className="bg-gradient-to-r from-primary to-secondary px-10 py-4 rounded-md font-headline font-bold text-on-primary-container shadow-[0_0_30px_rgba(255,122,251,0.3)] hover:scale-105 active:scale-95 transition-all duration-300">
+                    Explore the Multiverse
+                </button>
+<button className="glass-card px-10 py-4 rounded-md font-headline font-medium border border-outline-variant/20 hover:border-secondary/50 transition-all">
+                    Watch Trailer
+                </button>
+</div>
+</div>
+{/**/}
+<div className="absolute top-1/4 -right-20 w-96 h-96 bg-primary/10 blur-[120px] rounded-full"></div>
+</section>
+{/**/}
+<section className="py-32 px-8 md:px-20 bg-surface-container-low">
+<div className="flex flex-col md:flex-row justify-between items-end mb-16">
+<div>
+<h2 className="text-4xl md:text-6xl font-headline font-bold tracking-tighter mb-4">Latest Chapters</h2>
+<p className="text-on-surface-variant">Hand-picked releases from the most anticipated series.</p>
+</div>
+<a className="text-secondary font-headline uppercase tracking-widest text-xs font-bold flex items-center gap-2 hover:gap-4 transition-all" href="#">
+                View All Releases <span className="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-6 h-auto md:h-[600px]">
+{/**/}
+<div className="md:col-span-2 md:row-span-2 group relative overflow-hidden rounded-xl border border-outline-variant/10">
+<img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Highly detailed manga cover illustration showing a cyberpunk samurai in a rainy neon alleyway, cinematic perspective" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgMj3t2ICkRWKmEs80gunKrhiCWKDjhKM_c-WFpAItQ4ISXBQ5ImpxQWaBZiMxn9grPVRXvdKCkdwFDYUj5hTlY1XN75dTX0R4D6J066TpMigblxxB318HabUbtG8G0H4tq8wCOabWhNd8Mr0ipRnhxFOF35CK9navd0RiSHf-mmmjyLMm-hSuNFUOmu2wkUGfIZrSLYBesR9iriN20zI3psII841gAIrz4WjbJO-fptlbbonDzB2ga5PiGySlNoMGmcgtfrSvaIb_"/>
+<div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+<div className="absolute bottom-0 left-0 p-8">
+<span className="bg-secondary text-on-secondary px-3 py-1 text-[10px] font-bold uppercase tracking-widest mb-4 inline-block">Trending Now</span>
+<h3 className="text-3xl font-headline font-bold mb-2">Ghost in the Mesh</h3>
+<p className="text-on-surface-variant text-sm max-w-xs">Chapter 142: The digital soul resonance begins.</p>
+</div>
+</div>
+{/**/}
+<div className="md:col-span-2 glass-card p-6 flex gap-6 group hover:border-primary/30 border border-transparent transition-all">
+<div className="w-32 h-full flex-shrink-0 rounded-lg overflow-hidden">
+<img className="w-full h-full object-cover" data-alt="Anime style illustration of a mystical forest with floating glowing spirits and deep indigo lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuMa0v8vcR_QaRvmU_TJ38Um6XYj42i4jKdzf-vrxCcqRAAp9LLC2oi9uaXBg-AJJyEOVeKBddauC4_ITGspKQieN2WtHxoCs9YQ7cWSg6WAoMUOpZlrVef4VFBU0LW4ND6iOEexOc178YlMiA71U67WhFLhaElvEvWgrKY4VZZhrZ0NAcxrOR5ss42YWVdB-FQSJROf-DOu_AegiYFJDdUUq2sBM6LQqTnIygE2fcnl-9725cZCPg_x1Irp42t30NaJgou9traG_F"/>
+</div>
+<div className="flex flex-col justify-center">
+<h4 className="font-headline font-bold text-xl mb-1 group-hover:text-primary transition-colors">Shadow Bound</h4>
+<p className="text-xs text-on-surface-variant mb-4 uppercase tracking-tighter">Chapter 24 • Updated 2h ago</p>
+<p className="text-sm line-clamp-2 text-on-surface-variant">The warriors gather at the edge of the abyss for the final stand.</p>
+</div>
+</div>
+<div className="md:col-span-1 glass-card p-6 flex flex-col group hover:border-secondary/30 border border-transparent transition-all">
+<div className="w-full h-32 rounded-lg overflow-hidden mb-4">
+<img className="w-full h-full object-cover transition-transform group-hover:scale-105" data-alt="Close up of a stylized anime eye reflecting a vibrant futuristic cityscape with magenta highlights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDl6trehxI4EYpYLkWMMAM_NB99QmrqkseUw-AcGhyK_PuLX7Mxr-onJaN2z49tVaUwmVGyskWy-Nxj1vRcmeGEZPxmjdctO4V_C_ilJkW5tN2zYKyIhgLrj-UNCQqy3BHLQkbbSCSPUa4flsgjW_tWCGvh5czzbI_vSL11UqhHgPLFEWgkitnydf_grYmOzY1tlAbraC1FiXAGwkH6Hn6GZclhuvENIQoBWw2SEZLejkOoIn9su85p9G0tGoWE4Cuxwdih8UCdvRsM"/>
+</div>
+<h4 className="font-headline font-bold text-lg mb-1">Prism Gate</h4>
+<p className="text-[10px] text-on-surface-variant uppercase tracking-widest mb-2">New Release</p>
+<div className="mt-auto flex justify-between items-center">
+<span className="text-xs font-bold text-secondary">Read Free</span>
+<span className="material-symbols-outlined text-sm">bookmark</span>
+</div>
+</div>
+<div className="md:col-span-1 glass-card p-6 flex flex-col group hover:border-primary/30 border border-transparent transition-all">
+<div className="w-full h-32 rounded-lg overflow-hidden mb-4">
+<img className="w-full h-full object-cover transition-transform group-hover:scale-105" data-alt="Minimalist anime concept art of a floating island in a sea of clouds at sunset" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlM4Yk6BooOhkZxDGPtW6mjvm_9bno046JXTz0TV8bmEwbV1vAfuwxCA9xLfGmNqDFX4c19oY7Uxq8Ctkyq19TPn8zMh9R7T0ypNkwQQwL0uzyhntfQbajsv-wlmyb-nZd-cZYb6cyyx7DGbpjUu3-7UJdRAlVxfmWcIMH1wMflx9uzOIucSPSlv0RIOoVV4u9Z0LUenVseDvlkKGjVpJTSLjdgjvMePf4gpo0mSCVvLi42WVWcR2tcRqddGk9vqaTbSlrl0cjF5Uf"/>
+</div>
+<h4 className="font-headline font-bold text-lg mb-1">Cloud Walker</h4>
+<p className="text-[10px] text-on-surface-variant uppercase tracking-widest mb-2">Weekly Top</p>
+<div className="mt-auto flex justify-between items-center">
+<span className="text-xs font-bold text-primary">Pre-order</span>
+<span className="material-symbols-outlined text-sm">bookmark</span>
+</div>
+</div>
+</div>
+</section>
+{/**/}
+<section className="py-32 bg-surface">
+<div className="px-8 md:px-20 mb-16 overflow-hidden">
+<h2 className="text-4xl md:text-6xl font-headline font-bold tracking-tighter mb-4 text-right">Trending Fan Art</h2>
+<div className="flex justify-end">
+<div className="h-1 w-32 bg-gradient-to-r from-transparent to-primary"></div>
+</div>
+</div>
+<div className="flex gap-8 px-8 md:px-20 overflow-x-auto no-scrollbar pb-12">
+{/**/}
+<div className="flex-shrink-0 w-80 h-[500px] relative group rounded-xl overflow-hidden mt-12">
+<img className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="Digital painting of a mecha suit in mid-repair with sparks flying and dramatic orange rim lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqTKxsU9mGHerAA9crgcJ9pDHfVc3aphfEXrv_-09yhDn6aUvyeQkfzjz-K1hlbirkBVYv-xBCcmgIGeZcpaQ5DmTEpGB6E2PZ4DXeYSP5iK9EcBmxA-LIUfFC9Crz1vEa-nrMWGHLK-gkUlTMDJE7dspzdXWSNT_MWcceNgs2u1b8BKev2RLuzV1BpMJCt9InFVpgzfJhKPMjeWjBktT0zgN7ophQ-BjuKgcH3It0iqNv7reX3hGUh53XyOVqkDXTnNyo815CSK9u"/>
+<div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+<p className="font-headline font-bold text-xl">Core Overdrive</p>
+<p className="text-xs text-secondary mb-4">by @CyberArt_K</p>
+<div className="flex gap-4">
+<span className="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span className="material-symbols-outlined">share</span>
+</div>
+</div>
+</div>
+{/**/}
+<div className="flex-shrink-0 w-80 h-[500px] relative group rounded-xl overflow-hidden">
+<img className="w-full h-full object-cover transition-all duration-500" data-alt="Abstract anime character silhouette with swirling vaporwave colors and glitch effects" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBq97rFyyWONTReNiJDj_vXYUJSIaEfZkG0gEyXnRusrTwaAvp5ak1Fhoz05vBTwlmhY6fyOH295-HfzBQQihq_gVVCV0CvKQfqLTMwH1r5ffo9LmtUznFbKYbhAVvo1XwGG97-neeMeVg37nxA7uhf7yTVw13uklAfAUXzFpdPB-KvPsnP2r9cQhjv0Tr8XlM8lLj3K_x-fjYcIXbVs7kkXLzn9GCrSCTvxxZPJCXrVc_6Pk_DF9SJ03uDCIIY1R734-5a3sanvcQ3"/>
+<div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent"></div>
+<div className="absolute inset-0 flex flex-col justify-end p-6 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
+<p className="font-headline font-bold text-xl">Vapor Echo</p>
+<p className="text-xs text-secondary mb-4">by @NeonDreamer</p>
+<div className="flex gap-4">
+<span className="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span className="material-symbols-outlined">share</span>
+</div>
+</div>
+</div>
+{/**/}
+<div className="flex-shrink-0 w-80 h-[500px] relative group rounded-xl overflow-hidden mt-20">
+<img className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="Stylized painting of a girl holding a glowing butterfly in a dark garden with magical bokeh lights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwneMQqtwmjrXrXdsfHXH2agreUPDrhrHyITxco3Osl1B--dob3GKwB_7UGn0ZBj3JCYk6iuIeJPafnOEYa1j7PEM83tNIpytkWXJo4X-FOXChIi2nJDLwj5lRohRc93SaOH5NpNObSeKzFgglJp35NvK1BgLo5M6xjpetwIR4Cp6EVFwZMGyCwL1O-PSA7Dhxou8-vr9r0Vfa2-hjsXd8-pITIonb0JjHtnnG5WsT47EqvtyRSrcg68sptUCiLqt6icW03p7xVyWR"/>
+<div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+<p className="font-headline font-bold text-xl">Spirit Wing</p>
+<p className="text-xs text-secondary mb-4">by @Luna_Illust</p>
+<div className="flex gap-4">
+<span className="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span className="material-symbols-outlined">share</span>
+</div>
+</div>
+</div>
+{/**/}
+<div className="flex-shrink-0 w-80 h-[500px] relative group rounded-xl overflow-hidden mt-6">
+<img className="w-full h-full object-cover transition-all duration-500" data-alt="Cyberpunk character with bionic arm standing on a high skyscraper ledge looking at a holographic advertisement" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9HDZTnIIzTXTNUX6hzL1uEHZImsXGkKCAzHwbv3jGmTgf_40t6yj9NQC3r6S4e5VGMzoUqzB1lroXj7oiXMqD7GH8vh6YSLtydGMP1uG4N3q6UgPXUy49_QBfn3jlcayNktndZVgz8oKsn0fGqFxAsL5Vxd2SMLh-M1umAfeUqLVWnoJia4OI598x95YpKdWKpGpQf2n_NmnjyVeimV8xXMh5vZbxYHqLKLH0qX00je_MzdBDOx_LtkOKLxXtwKwjqRwy5ya4Uq-g"/>
+<div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+<p className="font-headline font-bold text-xl">City Edge</p>
+<p className="text-xs text-secondary mb-4">by @Tekno_S</p>
+<div className="flex gap-4">
+<span className="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span className="material-symbols-outlined">share</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+{/**/}
+<section className="relative py-40 bg-surface-container-low overflow-hidden">
+<div className="absolute inset-0 pointer-events-none">
+<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[500px] bg-primary/5 blur-[150px] rounded-full"></div>
+</div>
+<div className="relative z-10 max-w-4xl mx-auto text-center px-8">
+<h2 className="text-5xl md:text-7xl font-headline font-bold mb-8 tracking-tighter">Become part of the <span className="neon-gradient-text">Legend.</span></h2>
+<p className="text-on-surface-variant text-xl mb-12 max-w-2xl mx-auto font-light">Join thousands of creators and fans in the most advanced anime ecosystem on the web. Exclusive content, early access, and more.</p>
+<div className="flex flex-col md:flex-row items-center justify-center gap-6">
+<button className="w-full md:w-auto bg-primary text-on-primary-container px-12 py-5 rounded-md font-headline font-bold text-lg hover:shadow-[0_0_40px_rgba(255,122,251,0.5)] transition-all">
+                    Get Early Access
+                </button>
+<button className="w-full md:w-auto border border-outline-variant/30 px-12 py-5 rounded-md font-headline font-bold text-lg hover:bg-surface-container-highest transition-all">
+                    Learn More
+                </button>
+</div>
+</div>
+</section>
+{/**/}
+<footer className="bg-surface py-20 px-8 md:px-20 border-t border-outline-variant/10">
+<div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
+<div className="md:col-span-1">
+<div className="text-2xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-[#ff7afb] to-[#00fbfb] font-headline mb-6">
+                    NEON_HORIZON
+                </div>
+<p className="text-on-surface-variant text-sm leading-relaxed">
+                    Elevating the anime experience through cinematic design and community-driven content.
+                </p>
+</div>
+<div>
+<h5 className="font-headline font-bold uppercase tracking-widest text-xs mb-6 text-primary">Universe</h5>
+<ul className="space-y-4 text-sm text-on-surface-variant">
+<li><a className="hover:text-secondary transition-colors" href="#">Original Manga</a></li>
+<li><a className="hover:text-secondary transition-colors" href="#">Streaming</a></li>
+<li><a className="hover:text-secondary transition-colors" href="#">Creators Hub</a></li>
+<li><a className="hover:text-secondary transition-colors" href="#">The Vault</a></li>
+</ul>
+</div>
+<div>
+<h5 className="font-headline font-bold uppercase tracking-widest text-xs mb-6 text-primary">Community</h5>
+<ul className="space-y-4 text-sm text-on-surface-variant">
+<li><a className="hover:text-secondary transition-colors" href="#">Discord</a></li>
+<li><a className="hover:text-secondary transition-colors" href="#">Fan Art Arena</a></li>
+<li><a className="hover:text-secondary transition-colors" href="#">Events</a></li>
+<li><a className="hover:text-secondary transition-colors" href="#">Merchandise</a></li>
+</ul>
+</div>
+<div>
+<h5 className="font-headline font-bold uppercase tracking-widest text-xs mb-6 text-primary">Connect</h5>
+<div className="flex gap-4">
+<a className="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:text-secondary transition-all" href="#">
+<span className="material-symbols-outlined text-lg">public</span>
+</a>
+<a className="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:text-secondary transition-all" href="#">
+<span className="material-symbols-outlined text-lg">videocam</span>
+</a>
+<a className="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:text-secondary transition-all" href="#">
+<span className="material-symbols-outlined text-lg">campaign</span>
+</a>
+</div>
+</div>
+</div>
+<div className="pt-12 border-t border-outline-variant/10 flex flex-col md:flex-row justify-between items-center gap-6">
+<p className="text-[10px] text-on-surface-variant uppercase tracking-[0.2em]">© 2024 NEON_HORIZON ENTERTAINMENT. ALL RIGHTS RESERVED.</p>
+<div className="flex gap-8 text-[10px] text-on-surface-variant uppercase tracking-[0.2em]">
+<a className="hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a className="hover:text-white transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
