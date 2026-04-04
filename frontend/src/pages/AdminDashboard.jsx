@@ -14,22 +14,25 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard')
   const [stats, setStats] = useState(null)
 
-  const fetchDashboardData = async () => {
-    try {
-      const statsRes = await api.get('/admin/stats').catch(() => ({ data: { activeUsers: '24.8K', newFanArtToday: 1402, mangaChapters: 892, reportedContent: 42 } }))
-      setStats(statsRes.data)
-
-      // keep if future use needed
-      // const fanArtRes = await api.get('/fanart')
-      // setRecentUploads(fanArtRes.data?.slice(0, 4) || [])
-    } catch (err) {
-      console.error('Could not load dashboard data', err)
-    }
-  }
-
   useEffect(() => {
     fetchDashboardData()
   }, [])
+
+  const fetchDashboardData = async () => {
+    try {
+      const statsRes = await api.get('/admin/stats').catch(() => ({
+        data: {
+          activeUsers: '24.8K',
+          newFanArtToday: 1402,
+          mangaChapters: 892,
+          reportedContent: 42
+        }
+      }))
+      setStats(statsRes.data)
+    } catch (err) {
+      console.error(err)
+    }
+  }
 
   const handleLogout = () => {
     logout()
@@ -37,283 +40,166 @@ const AdminDashboard = () => {
   }
 
   const renderDashboardOverview = () => {
-    const s = stats || { activeUsers: '24.8K', newFanArtToday: '1,402', mangaChapters: '892', reportedContent: '42' }
+    const s = stats || {
+      activeUsers: '24.8K',
+      newFanArtToday: '1,402',
+      mangaChapters: '892',
+      reportedContent: '42'
+    }
 
     return (
-      <>
-        <header>
+      <div className="space-y-10">
+
+        {/* HEADER */}
+        <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div>
-            <h2>Admin Core</h2>
-            <p>System Overseer — Dashboard Overview</p>
+            <h2 className="text-3xl font-bold tracking-wide">
+              Admin <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">Core</span>
+            </h2>
+            <p className="text-gray-400">System Overseer — Dashboard Overview</p>
           </div>
-          <div>
-            <button>
-                                Generate Report
-                            </button>
-            <button>
-                                Sync Database
-                            </button>
+
+          <div className="flex gap-3">
+            <button className="px-5 py-2 rounded-lg bg-white/5 border border-white/10 hover:border-purple-500/40 transition">
+              Generate Report
+            </button>
+            <button className="px-5 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 hover:scale-105 transition">
+              Sync Database
+            </button>
           </div>
         </header>
 
-        <section>
-          <div>
-            <div>
-              <span data-icon="group">group</span>
+        {/* STATS */}
+        <section className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            { label: 'Active Users', value: s.activeUsers, color: 'purple' },
+            { label: 'New Fan Art', value: s.newFanArtToday, color: 'pink' },
+            { label: 'Manga Chapters', value: s.mangaChapters, color: 'blue' },
+            { label: 'Reported Content', value: s.reportedContent, color: 'red' }
+          ].map((item, i) => (
+            <div
+              key={i}
+              className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-purple-500/30 transition backdrop-blur-md"
+            >
+              <p className="text-gray-400 text-sm">{item.label}</p>
+              <h3 className="text-2xl font-bold mt-2">{item.value}</h3>
+              <span className="text-xs text-green-400">+ Live</span>
             </div>
-            <p>Active Users</p>
-            <div>
-              <h3>{s.activeUsers || '24.8K'}</h3>
-              <span>+12%</span>
-            </div>
+          ))}
+        </section>
+
+        {/* TABLE */}
+        <section className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-md">
+          <div className="flex justify-between mb-4">
+            <h4 className="font-semibold">Recent User Uploads</h4>
+            <a className="text-purple-400 text-sm cursor-pointer">View All</a>
           </div>
-          <div>
-            <div>
-              <span data-icon="palette">palette</span>
-            </div>
-            <p>New Fan Art</p>
-            <div>
-              <h3>{s.newFanArtToday || '1,402'}</h3>
-              <span>Today</span>
-            </div>
-          </div>
-          <div>
-            <div>
-              <span data-icon="book_5">book_5</span>
-            </div>
-            <p>Manga Chapters</p>
-            <div>
-              <h3>{s.mangaChapters || '892'}</h3>
-              <span>Total</span>
-            </div>
-          </div>
-          <div>
-            <div>
-              <span data-icon="warning">warning</span>
-            </div>
-            <p>Reported Content</p>
-            <div>
-              <h3>{s.reportedContent || '42'}</h3>
-              <span>Urgent</span>
-            </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="text-gray-400">
+                <tr>
+                  <th className="text-left py-2">User</th>
+                  <th>Type</th>
+                  <th>Time</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {['Approved', 'Pending', 'Approved', 'Pending'].map((status, i) => (
+                  <tr key={i} className="border-t border-white/5 hover:bg-white/5 transition">
+                    <td className="py-3">User_{i}</td>
+                    <td>Fan Art</td>
+                    <td>{i * 10} mins ago</td>
+                    <td>
+                      <span className={`px-3 py-1 rounded-full text-xs ${
+                        status === 'Approved'
+                          ? 'bg-green-500/20 text-green-400'
+                          : 'bg-yellow-500/20 text-yellow-400'
+                      }`}>
+                        {status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </section>
 
-        <div>
-          <section>
-            <div>
-              <h4>Recent User Uploads</h4>
-              <a href="#">View All Activity</a>
-            </div>
-            <div>
-              <table>
-                <thead>
-                  <tr>
-                    <th>User</th>
-                    <th>Content Type</th>
-                    <th>Timestamp</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <div>
-                        <span data-icon="person">person</span>
-                      </div>
-                      <span>Kaito_Vibes</span>
-                    </td>
-                    <td>
-                      <span>Fan Art</span>
-                    </td>
-                    <td>2 mins ago</td>
-                    <td>
-                      <span>
-                        <span></span>
-                                                              Approved
-                                                          </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div>
-                        <span data-icon="person">person</span>
-                      </div>
-                      <span>Manga_Collector_99</span>
-                    </td>
-                    <td>
-                      <span>Chapter Update</span>
-                    </td>
-                    <td>14 mins ago</td>
-                    <td>
-                      <span>
-                        <span></span>
-                                                              Pending
-                                                          </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div>
-                        <span data-icon="person">person</span>
-                      </div>
-                      <span>GhostInShell</span>
-                    </td>
-                    <td>
-                      <span>Video Clip</span>
-                    </td>
-                    <td>42 mins ago</td>
-                    <td>
-                      <span>
-                        <span></span>
-                                                              Approved
-                                                          </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div>
-                        <span data-icon="person">person</span>
-                      </div>
-                      <span>Nexus_Zero</span>
-                    </td>
-                    <td>
-                      <span>Fan Art</span>
-                    </td>
-                    <td>1 hour ago</td>
-                    <td>
-                      <span>
-                        <span></span>
-                                                              Pending
-                                                          </span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
+        {/* QUICK ACTIONS */}
+        <section className="grid md:grid-cols-2 gap-6">
 
-          <section>
-            <h4>Quick Actions</h4>
-            <div>
-              <button onClick={() => setActiveTab('manga')}>
-                <div>
-                  <div>
-                    <span data-icon="library_add">library_add</span>
-                  </div>
-                  <div>
-                    <p>Add New Chapter</p>
-                    <p>Upload latest manga scanlation</p>
-                  </div>
-                </div>
-                <div></div>
-              </button>
-              <button onClick={() => setActiveTab('videos')}>
-                <div>
-                  <div>
-                    <span data-icon="video_call">video_call</span>
-                  </div>
-                  <div>
-                    <p>Upload Video</p>
-                    <p>Add anime edits or trailers</p>
-                  </div>
-                </div>
-                <div></div>
-              </button>
-              
-              <div>
-                <p>System Integrity</p>
-                <div>
-                  <div>
-                    <div>
-                      <span>Server Load</span>
-                      <span>24%</span>
-                    </div>
-                    <div>
-                      <div></div>
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <span>Bandwidth Usage</span>
-                      <span>68%</span>
-                    </div>
-                    <div>
-                      <div></div>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <span>Global Status</span>
-                  <span>
-                    <span></span>
-                                                    Operational
-                                                </span>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-        
-        <footer>
-          <div>
-            <span></span>
-            <p>Neon Horizon Terminal v2.04</p>
-            <span></span>
-          </div>
-        </footer>
-      </>
+          <button
+            onClick={() => setActiveTab('manga')}
+            className="p-6 rounded-2xl bg-gradient-to-br from-purple-600/30 to-transparent border border-purple-500/20 hover:scale-[1.02] transition"
+          >
+            <p className="font-semibold">Add New Chapter</p>
+            <p className="text-sm text-gray-400">Upload latest manga</p>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('videos')}
+            className="p-6 rounded-2xl bg-gradient-to-br from-pink-600/30 to-transparent border border-pink-500/20 hover:scale-[1.02] transition"
+          >
+            <p className="font-semibold">Upload Video</p>
+            <p className="text-sm text-gray-400">Add anime clips</p>
+          </button>
+
+        </section>
+
+      </div>
     )
   }
 
   return (
-    <div>
-      <aside>
+    <div className="flex min-h-screen bg-black text-white overflow-x-hidden">
+
+      {/* SIDEBAR */}
+      <aside className="w-64 hidden md:flex flex-col justify-between border-r border-white/10 bg-black/80 backdrop-blur-xl p-6">
+
         <div>
-          <h1 onClick={() => navigate('/')}>NEON_HORIZON</h1>
-          <div>
-            <img alt="Admin Avatar"  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQRpHZAQqWtvdVfCiIFT0t4bfiCD5FKRZyjV49dU4IxPxx6b8uYSiimPjQXhy6p8TPDiGB_SK5qn-97diNk3udF239IM5eGEvy07GEgoWnemzAMksKQD5luJlTV2KWjQHHZgQxYd4j5d7R3gPobtHNNEWNBWqHDF6huDN7P2yuQ1SBSIGxuzneiwzyhK6eFBx7MhPIjG0v9-aMw6cQZKHEQFTj5dK_qZcZnwxmUfZ1qifBEKSw8842K8w6v-Wdo8f9TtN5mvf-s-El"/>
-            <div>
-              <p>Admin Core</p>
-              <p>System Overseer</p>
-            </div>
-          </div>
+          <h1
+            onClick={() => navigate('/')}
+            className="text-xl font-bold cursor-pointer mb-10 tracking-widest text-purple-400"
+          >
+            NEON_HORIZON
+          </h1>
+
+          <nav className="space-y-3">
+            {[
+              ['dashboard', 'Dashboard'],
+              ['manga', 'Manga'],
+              ['fanart', 'Fan Art'],
+              ['videos', 'Videos'],
+              ['animelinks', 'Anime Links'],
+              ['users', 'Users']
+            ].map(([key, label]) => (
+              <button
+                key={key}
+                onClick={() => setActiveTab(key)}
+                className={`w-full text-left px-4 py-2 rounded-lg transition ${
+                  activeTab === key
+                    ? 'bg-purple-600/20 text-purple-400'
+                    : 'hover:bg-white/5 text-gray-400'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </nav>
         </div>
-        <nav>
-          <a onClick={() => setActiveTab('dashboard')}>
-            <span>dashboard</span>
-            <span>Dashboard</span>
-          </a>
-          <a onClick={() => setActiveTab('manga')}>
-            <span>book_5</span>
-            <span>Manga Management</span>
-          </a>
-          <a onClick={() => setActiveTab('fanart')}>
-            <span>palette</span>
-            <span>Fan Art Moderation</span>
-          </a>
-          <a onClick={() => setActiveTab('videos')}>
-            <span>movie</span>
-            <span>Video Management</span>
-          </a>
-          <a onClick={() => setActiveTab('animelinks')}>
-            <span>tv</span>
-            <span>Anime Links</span>
-          </a>
-          <a onClick={() => setActiveTab('users')}>
-            <span>group</span>
-            <span>User Management</span>
-          </a>
-        </nav>
-        <div>
-          <a onClick={handleLogout}>
-            <span>logout</span>
-            <span>Logout</span>
-          </a>
-        </div>
+
+        <button
+          onClick={handleLogout}
+          className="text-red-400 hover:text-red-500 transition"
+        >
+          Logout
+        </button>
       </aside>
 
-      <main>
+      {/* MAIN */}
+      <main className="flex-1 p-6 md:p-10">
         {activeTab === 'dashboard' && renderDashboardOverview()}
         {activeTab === 'manga' && <MangaManagement />}
         {activeTab === 'fanart' && <FanArtModeration />}
@@ -321,6 +207,7 @@ const AdminDashboard = () => {
         {activeTab === 'animelinks' && <AnimeLinkManagement />}
         {activeTab === 'users' && <UserManagement />}
       </main>
+
     </div>
   )
 }

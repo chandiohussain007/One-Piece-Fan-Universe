@@ -2,62 +2,72 @@ import React from 'react'
 
 const TrendingFanArt = ({ trendingArt = [] }) => {
   return (
-    <section>
-      <div>
-        <h2>Trending Fan Art</h2>
-        <div>
-          <div></div>
+    <section className="relative bg-black text-white py-20 px-6 overflow-hidden">
+
+      {/* Glow background */}
+      <div className="absolute top-[-100px] right-[-100px] w-[300px] h-[300px] bg-pink-600 opacity-20 blur-[120px] rounded-full"></div>
+      <div className="absolute bottom-[-120px] left-[-100px] w-[300px] h-[300px] bg-purple-600 opacity-20 blur-[120px] rounded-full"></div>
+
+      <div className="relative max-w-7xl mx-auto">
+
+        {/* HEADER */}
+        <div className="mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold">
+            Trending <span className="text-pink-400">Fan Art</span>
+          </h2>
+          <p className="text-gray-400 mt-2">
+            Community masterpieces that are blowing up right now.
+          </p>
         </div>
-      </div>
-      <div>
-        <div>
-          <img src={trendingArt[0]?.mediaUrl || "https://lh3.googleusercontent.com/aida-public/AB6AXuAqTKxsU9mGHerAA9crgcJ9pDHfVc3aphfEXrv_-09yhDn6aUvyeQkfzjz-K1hlbirkBVYv-xBCcmgIGeZcpaQ5DmTEpGB6E2PZ4DXeYSP5iK9EcBmxA-LIUfFC9Crz1vEa-nrMWGHLK-gkUlTMDJE7dspzdXWSNT_MWcceNgs2u1b8BKev2RLuzV1BpMJCt9InFVpgzfJhKPMjeWjBktT0zgN7ophQ-BjuKgcH3It0iqNv7reX3hGUh53XyOVqkDXTnNyo815CSK9u"} />
-          <div>
-            <p>{trendingArt[0]?.content || "Core Overdrive"}</p>
-            <p>by @{trendingArt[0]?.user?.username || "CyberArt_K"}</p>
-            <div>
-              <span>favorite</span>
-              <span>share</span>
+
+        {/* GRID */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-[200px]">
+
+          {trendingArt.slice(0, 4).map((art, i) => (
+            <div
+              key={i}
+              className={`group relative overflow-hidden rounded-2xl ${
+                i === 0 ? "md:col-span-2 md:row-span-2" : ""
+              }`}
+            >
+              {/* IMAGE */}
+              <img
+                src={art?.mediaUrl}
+                className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+              />
+
+              {/* DARK OVERLAY */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition duration-300"></div>
+
+              {/* CONTENT */}
+              <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition duration-300">
+
+                <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-3">
+
+                  <p className="font-semibold text-sm">
+                    {art?.content || "Untitled Art"}
+                  </p>
+
+                  <p className="text-xs text-gray-300 mt-1">
+                    by @{art?.user?.username || "Unknown"}
+                  </p>
+
+                  <div className="flex justify-between mt-3 text-sm text-gray-300">
+                    <span className="hover:text-pink-400 cursor-pointer">❤</span>
+                    <span className="hover:text-purple-400 cursor-pointer">↗</span>
+                  </div>
+
+                </div>
+              </div>
+
+              {/* SUBTLE BORDER GLOW */}
+              <div className="absolute inset-0 rounded-2xl border border-white/10 group-hover:border-pink-500/40 transition"></div>
+
             </div>
-          </div>
+          ))}
+
         </div>
-        
-        <div>
-          <img src={trendingArt[1]?.mediaUrl || "https://lh3.googleusercontent.com/aida-public/AB6AXuBq97rFyyWONTReNiJDj_vXYUJSIaEfZkG0gEyXnRusrTwaAvp5ak1Fhoz05vBTwlmhY6fyOH295-HfzBQQihq_gVVCV0CvKQfqLTMwH1r5ffo9LmtUznFbKYbhAVvo1XwGG97-neeMeVg37nxA7uhf7yTVw13uklAfAUXzFpdPB-KvPsnP2r9cQhjv0Tr8XlM8lLj3K_x-fjYcIXbVs7kkXLzn9GCrSCTvxxZPJCXrVc_6Pk_DF9SJ03uDCIIY1R734-5a3sanvcQ3"} />
-          <div></div>
-          <div>
-            <p>{trendingArt[1]?.content || "Vapor Echo"}</p>
-            <p>by @{trendingArt[1]?.user?.username || "NeonDreamer"}</p>
-            <div>
-              <span>favorite</span>
-              <span>share</span>
-            </div>
-          </div>
-        </div>
-        
-        <div>
-          <img src={trendingArt[2]?.mediaUrl || "https://lh3.googleusercontent.com/aida-public/AB6AXuDwneMQqtwmjrXrXdsfHXH2agreUPDrhrHyITxco3Osl1B--dob3GKwB_7UGn0ZBj3JCYk6iuIeJPafnOEYa1j7PEM83tNIpytkWXJo4X-FOXChIi2nJDLwj5lRohRc93SaOH5NpNObSeKzFgglJp35NvK1BgLo5M6xjpetwIR4Cp6EVFwZMGyCwL1O-PSA7Dhxou8-vr9r0Vfa2-hjsXd8-pITIonb0JjHtnnG5WsT47EqvtyRSrcg68sptUCiLqt6icW03p7xVyWR"} />
-          <div>
-            <p>{trendingArt[2]?.content || "Spirit Wing"}</p>
-            <p>by @{trendingArt[2]?.user?.username || "Luna_Illust"}</p>
-            <div>
-              <span>favorite</span>
-              <span>share</span>
-            </div>
-          </div>
-        </div>
-        
-        <div>
-          <img src={trendingArt[3]?.mediaUrl || "https://lh3.googleusercontent.com/aida-public/AB6AXuC9HDZTnIIzTXTNUX6hzL1uEHZImsXGkKCAzHwbv3jGmTgf_40t6yj9NQC3r6S4e5VGMzoUqzB1lroXj7oiXMqD7GH8vh6YSLtydGMP1uG4N3q6UgPXUy49_QBfn3jlcayNktndZVgz8oKsn0fGqFxAsL5Vxd2SMLh-M1umAfeUqLVWnoJia4OI598x95YpKdWKpGpQf2n_NmnjyVeimV8xXMh5vZbxYHqLKLH0qX00je_MzdBDOx_LtkOKLxXtwKwjqRwy5ya4Uq-g"} />
-          <div>
-            <p>{trendingArt[3]?.content || "City Edge"}</p>
-            <p>by @{trendingArt[3]?.user?.username || "Tekno_S"}</p>
-            <div>
-              <span>favorite</span>
-              <span>share</span>
-            </div>
-          </div>
-        </div>
+
       </div>
     </section>
   )
