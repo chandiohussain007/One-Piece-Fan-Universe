@@ -42,7 +42,7 @@ const fanartUpload = multer({
     const allowedTypes = /jpeg|jpg|png|gif|mp4|webm|mov/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = /image\/(jpeg|jpg|png|gif)|video\/(mp4|webm|quicktime)/.test(file.mimetype);
-    if (extname || mimetype) return cb(null, true);
+    if (extname && mimetype) return cb(null, true);
     cb(new Error('Only images and videos are allowed'));
   }
 });

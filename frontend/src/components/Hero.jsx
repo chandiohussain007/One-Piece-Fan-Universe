@@ -7,7 +7,7 @@ const Hero = () => {
 
       {/* Background Image */}
       <img 
-        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaC19CoKqiZaNcQMHCdDjsIwdBROfFcQC1o_Cr9PkarKZlyjWFLOi48JlXeIMyot9YqZlaCxJplJyxXxMNqlv6_N0eTLTLMi5g586aFmDXyTSERZVNvYx4zzATG4te2dJSRlGsyaGYa9wv5GEblesWKIOnCkXpkM-CvsFx5eX0ceKnT1wFL88sL8qErGpG5O6O4eRX_NBcR_6V4muo_FKHvt_nLELTdfmM8nMxFnHDm17JnuHQzHlQnU9i6VTSGU-w6Z7XVueS149d"
+        src="/images/1345309.jpeg"
         alt="anime bg"
         className="absolute inset-0 w-full h-full object-cover opacity-40"
       />
@@ -67,10 +67,18 @@ const Hero = () => {
             </h3>
 
             <ul className="space-y-2 text-gray-300 text-sm">
-              <li className="hover:text-white transition">Attack on Titan</li>
-              <li className="hover:text-white transition">Jujutsu Kaisen</li>
-              <li className="hover:text-white transition">Demon Slayer</li>
-              <li className="hover:text-white transition">Solo Leveling</li>
+              <li className="hover:text-white transition">
+                <Link to="">One Piece Manga Chapter 1100</Link>
+              </li>
+              <li className="hover:text-white transition">
+                <Link to="">One Piece Movie: Red</Link>
+              </li>
+              <li className="hover:text-white transition">
+                <Link to="">Latest One Piece Episode</Link>
+              </li>
+              <li className="hover:text-white transition">
+                <Link to="">One Piece Official Merch</Link>
+              </li>
             </ul>
 
           </div>
@@ -80,6 +88,7 @@ const Hero = () => {
 
       {/* Bottom Fade */}
       <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black to-transparent"></div>
+
 
     </section>
   )

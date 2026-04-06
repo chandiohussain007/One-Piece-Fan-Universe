@@ -1,17 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const RecentChapters = ({ latestChapters = [] }) => {
+const RecentChapters = () => {
   return (
-    <section className="relative bg-black text-white py-20 px-6 overflow-hidden">
+    <section className="bg-black text-white py-20 px-6">
 
-      {/* Background glow */}
-      <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] bg-purple-600 opacity-20 blur-[120px] rounded-full"></div>
-      <div className="absolute bottom-[-120px] right-[-100px] w-[300px] h-[300px] bg-pink-600 opacity-20 blur-[120px] rounded-full"></div>
+      <div className="max-w-7xl mx-auto">
 
-      <div className="relative max-w-7xl mx-auto">
-
-        {/* HEADER */}
+        {/* Header */}
         <div className="flex justify-between items-center mb-12 flex-wrap gap-4">
           <div>
             <h2 className="text-3xl md:text-4xl font-bold mb-2">
@@ -30,116 +26,87 @@ const RecentChapters = ({ latestChapters = [] }) => {
           </Link>
         </div>
 
-        {/* GRID */}
+        {/* Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-          {/* FEATURED CARD */}
+          {/* Featured */}
           <Link 
-            to={latestChapters[0] ? `/manga/${latestChapters[0]._id}` : '#'}
-            className="lg:col-span-2 group relative rounded-2xl overflow-hidden"
+            to="#"
+            className="lg:col-span-2 rounded-2xl overflow-hidden shadow-lg"
           >
-            <img 
-              src={latestChapters[0]?.coverImage}
-              className="w-full h-[400px] object-cover group-hover:scale-105 transition duration-500"
-            />
+            <div className="aspect-[3/2] w-full overflow-hidden rounded-2xl">
+              <img 
+                src="/images/Chapter_1179.webp"
+                alt="Nerona Imu Descends"
+                className="w-full h-full object-cover"
+              />
+            </div>
 
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
-
-            <div className="absolute bottom-6 left-6 right-6">
+            <div className="p-6 bg-gradient-to-t from-black via-black/60 to-transparent">
               <span className="text-xs bg-purple-500 px-3 py-1 rounded-full">
                 🔥 Trending Now
               </span>
-
-              <h3 className="text-2xl font-bold mt-3">
-                {latestChapters[0]?.title || "Ghost in the Mesh"}
-              </h3>
-
-              <p className="text-gray-300 text-sm mt-2">
-                {latestChapters[0]?.description || "Chapter drop just hit. Dive in now."}
-              </p>
+              <h3 className="text-2xl font-bold mt-3">Nerona Imu Descends</h3>
+              <p className="text-gray-300 text-sm mt-2">Chapter 1179</p>
             </div>
           </Link>
 
-          {/* SIDE CARDS */}
+          {/* Side Cards */}
           <div className="flex flex-col gap-6">
 
-            {/* CARD 1 */}
             <Link 
-              to={latestChapters[1] ? `/manga/${latestChapters[1]._id}` : '#'}
-              className="group flex gap-4 bg-white/5 border border-white/10 backdrop-blur-lg rounded-xl p-4 hover:bg-white/10 transition"
+              to="#"
+              className="flex gap-4 bg-white/5 border border-white/10 rounded-xl p-4"
             >
-              <img 
-                src={latestChapters[1]?.coverImage}
-                className="w-20 h-28 object-cover rounded-lg group-hover:scale-105 transition"
-              />
-
+              <div className="w-20 h-28 overflow-hidden rounded-lg">
+                <img 
+                  src="/images/Chapter_1178.webp"
+                  alt="Waking up from the Nightmare"
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <div>
-                <h4 className="font-semibold">
-                  {latestChapters[1]?.title || "Shadow Bound"}
-                </h4>
-
-                <p className="text-xs text-gray-400">
-                  Chapter {latestChapters[1]?.order || '24'}
-                </p>
-
-                <p className="text-xs text-gray-300 mt-2 line-clamp-2">
-                  {latestChapters[1]?.description || "The warriors gather for a final stand."}
-                </p>
+                <h4 className="font-semibold">Waking up from the Nightmare</h4>
+                <p className="text-xs text-gray-400">Chapter 1178</p>
               </div>
             </Link>
 
-            {/* CARD 2 */}
             <Link 
-              to={latestChapters[2] ? `/manga/${latestChapters[2]._id}` : '#'}
-              className="group bg-white/5 border border-white/10 backdrop-blur-lg rounded-xl p-4 hover:bg-white/10 transition"
+              to="#"
+              className="flex gap-4 bg-white/5 border border-white/10 rounded-xl p-4"
             >
-              <img 
-                src={latestChapters[2]?.coverImage}
-                className="w-full h-40 object-cover rounded-lg mb-3 group-hover:scale-105 transition"
-              />
-
-              <h4 className="font-semibold">
-                {latestChapters[2]?.title || "Prism Gate"}
-              </h4>
-
-              <p className="text-xs text-purple-400 mt-1">
-                New Release
-              </p>
-
-              <div className="flex justify-between mt-3 text-xs text-gray-300">
-                <span>Read Now</span>
-                <span>🔖</span>
+              <div className="w-20 h-28 overflow-hidden rounded-lg">
+                <img 
+                  src="/images/Chapter_1177.webp"
+                  alt="Furious"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <h4 className="font-semibold">Furious</h4>
+                <p className="text-xs text-gray-400">Chapter 1177</p>
               </div>
             </Link>
 
-            {/* CARD 3 */}
             <Link 
-              to={latestChapters[3] ? `/manga/${latestChapters[3]._id}` : '#'}
-              className="group bg-white/5 border border-white/10 backdrop-blur-lg rounded-xl p-4 hover:bg-white/10 transition"
+              to="#"
+              className="flex gap-4 bg-white/5 border border-white/10 rounded-xl p-4"
             >
-              <img 
-                src={latestChapters[3]?.coverImage}
-                className="w-full h-40 object-cover rounded-lg mb-3 group-hover:scale-105 transition"
-              />
-
-              <h4 className="font-semibold">
-                {latestChapters[3]?.title || "Cloud Walker"}
-              </h4>
-
-              <p className="text-xs text-pink-400 mt-1">
-                Weekly Top
-              </p>
-
-              <div className="flex justify-between mt-3 text-xs text-gray-300">
-                <span>Read Now</span>
-                <span>🔖</span>
+              <div className="w-20 h-28 overflow-hidden rounded-lg">
+                <img 
+                  src="/images/aces-story.webp"
+                  alt="Ace's Story"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <h4 className="font-semibold">Ace's Story</h4>
+                <p className="text-xs text-gray-400">Light Novel</p>
               </div>
             </Link>
 
           </div>
-
         </div>
-
       </div>
     </section>
   )

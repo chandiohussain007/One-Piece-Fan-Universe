@@ -45,12 +45,16 @@ const Navbar = () => {
         `}
       >
         {/* LEFT: LOGO */}
-        <Link
-          to="/"
-          className={`text-white font-bold text-lg tracking-wider transition-all duration-300 ${!isHome && scrolled ? 'text-base' : 'text-lg'}`}
-        >
-          NEON_HORIZON
-        </Link>
+       {/* LEFT: LOGO */}
+<Link to="/">
+  <img
+    src="/images/logo.png"
+    alt="logo"
+    className={`transition-all duration-300 ${
+      !isHome && scrolled ? 'h-6' : 'h-8'
+    }`}
+  />
+</Link>
 
         {/* CENTER: NAV LINKS */}
         <div className="hidden md:flex items-center gap-6">

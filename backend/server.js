@@ -14,6 +14,8 @@ const animeLinkRoutes = require('./routes/animeLink');
 const commentRoutes = require('./routes/comment');
 const adminRoutes = require('./routes/admin');
 const uploadRoutes = require('./routes/upload');
+const linkPreviewRoutes = require('./routes/linkPreview');
+
 
 const app = express();
 
@@ -47,6 +49,8 @@ app.use('/api/animelinks', animeLinkRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/uploads', express.static('uploads'));
+app.use('/api', linkPreviewRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

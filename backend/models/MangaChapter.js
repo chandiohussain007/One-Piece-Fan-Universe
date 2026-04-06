@@ -1,52 +1,44 @@
 const mongoose = require('mongoose');
 
 const mangaChapterSchema = new mongoose.Schema({
-  title: {
+  mangaDexChapterId: {
     type: String,
     required: true,
+    unique: true
+  },
+  mangaDexMangaId: {
+    type: String,
+    required: true
+  },
+  title: {
+    type: String,
+    default: '',
     trim: true
+  },
+  volume: {
+    type: String,
+    default: null
+  },
+  chapter: {
+    type: String,
+    default: null
+  },
+  category: {
+    type: String,
+    enum: ['Manga', 'One Shots', 'Light Novels'],
+    required: true
   },
   description: {
     type: String,
     default: ''
   },
-  animeName: {
-    type: String,
-    default: '',
-    trim: true
-  },
-  type: {
-    type: String,
-    enum: ['upload', 'link', 'html', 'pdf'],
-    default: 'link'
-  },
-  // For uploaded images/pdfs - array of { url, fileType }
-  contentFiles: [{
-    url: { type: String },
-    fileType: { type: String, enum: ['image', 'pdf'], default: 'image' }
-  }],
-  // For external links
-  externalLink: {
-    type: String,
-    default: ''
-  },
-  // For HTML embed code (iframes, etc.)
-  htmlEmbed: {
-    type: String,
-    default: ''
-  },
-  order: {
-    type: Number,
-    default: 0
-  },
   coverImage: {
     type: String,
     default: ''
   },
-  status: {
-    type: String,
-    enum: ['draft', 'published'],
-    default: 'draft'
+  publishAt: {
+    type: Date,
+    default: Date.now
   },
   views: {
     type: Number,
