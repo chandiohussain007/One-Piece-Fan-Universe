@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import api from '../services/api'
 import { FaBookOpen, FaLink, FaCode, FaFilePdf, FaEye, FaSearch } from 'react-icons/fa'
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
+
 const MangaPage = () => {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -127,7 +129,7 @@ const MangaPage = () => {
                       {chapter.coverImage ? (
                         <img
                           src={chapter.coverImage.startsWith('/')
-                            ? `http://localhost:5000${chapter.coverImage}`
+                            ? `${API_BASE}${chapter.coverImage}`
                             : chapter.coverImage}
                           className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
                         />

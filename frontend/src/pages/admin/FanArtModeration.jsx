@@ -3,7 +3,7 @@ import api from '../../services/api'
 import toast from 'react-hot-toast'
 import { FaCheck, FaTimes, FaTrash, FaImage, FaVideo, FaAlignLeft, FaFilter } from 'react-icons/fa'
 
-const API_BASE = 'http://localhost:5000'
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
 
 const FanArtModeration = () => {
   const [posts, setPosts] = useState([])

@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import api from '../services/api'
 import { FaArrowLeft, FaExternalLinkAlt, FaBookOpen } from 'react-icons/fa'
 
-const API_BASE = 'http://localhost:5000'
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
 
 const MangaReaderPage = () => {
   const { id } = useParams()
