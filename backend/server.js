@@ -23,7 +23,7 @@ app.use(helmet());
 
 // CORS - temporarily allow all for testing, replace '*' with your frontend URL later
 app.use(cors({
-  origin: '*', 
+  origin: 'process.env.CLIENT_URL', 
   credentials: true
 }));
 
