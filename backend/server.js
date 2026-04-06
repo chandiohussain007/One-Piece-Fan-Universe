@@ -18,25 +18,30 @@ const linkPreviewRoutes = require('./routes/linkPreview');
 
 const app = express();
 
+// 🔥 Render proxy fix
+app.set('trust proxy', 1); // MUST be before rate limiter
+
 // Security middleware
 app.use(helmet());
 
-// CORS - temporarily allow all for testing, replace '*' with your frontend URL later
-app.use(cors({
-  origin: 'process.env.CLIENT_URL', 
-  credentials: true
-}));
-
-// Rate limiting
+// Rate limiting - apply to all /api routes
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false
 });
-app.use('/api/', limiter);
+app.use('/api', limiter);
 
 // Body parsing middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// CORS - allow your frontend only
+app.use(cors({
+  origin: process.env.CLIENT_URL, // read from env
+  credentials: true
+}));
 
 // Static files for uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -60,7 +65,7 @@ app.get('/api/test', (req, res) => {
 // Health check for Render
 app.get('/healthz', (req, res) => res.json({ status: 'ok' }));
 
-// Error handling middleware
+// Global error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(err.status || 500).json({
