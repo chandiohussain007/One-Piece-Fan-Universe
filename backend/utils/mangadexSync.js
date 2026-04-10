@@ -7,16 +7,27 @@ const BASE_URL = 'https://api.mangadex.org';
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
 async function getMangaCover(mangaId) {
+  // Hardcode beautiful cover for the main One Piece manga because MangaDex 
+  // uses an ugly copyright placeholder.
+  if (mangaId === ONE_PIECE_MANGA_ID) {
+    return 'https://1piecefandom.netlify.app/images/1345309.jpeg'; 
+  }
+
   try {
     const res = await axios.get(`${BASE_URL}/manga/${mangaId}?includes[]=cover_art`);
     const coverArt = res.data.data.relationships.find(rel => rel.type === 'cover_art');
     if (coverArt) {
-      return `https://uploads.mangadex.org/covers/${mangaId}/${coverArt.attributes.fileName}`;
+      const fileName = coverArt.attributes.fileName;
+      // If by any chance other manga use the generic placeholder, override it:
+      if (fileName === '2f4aca53-64c7-46ac-ae85-3bc9b3169890.png') {
+         return 'https://1piecefandom.netlify.app/images/1345309.jpeg';
+      }
+      return `https://uploads.mangadex.org/covers/${mangaId}/${fileName}`;
     }
   } catch (error) {
     console.error(`Failed to fetch cover for ${mangaId}`, error.message);
   }
-  return null;
+  return 'https://1piecefandom.netlify.app/images/1345309.jpeg'; // ultimate fallback
 }
 
 // Map strings to MangaDex search requests
