@@ -1,7 +1,7 @@
 const axios = require('axios');
 const MangaChapter = require('../models/MangaChapter');
 
-const ONE_PIECE_MANGA_ID = 'a1c7c817-4e59-43b7-9365-09675a149a6f';
+const ONE_PIECE_MANGA_ID = process.env.ONE_PIECE_ID || 'a1c7c817-4e59-43b7-9365-09675a149a6f';
 const BASE_URL = 'https://api.mangadex.org';
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
@@ -21,8 +21,37 @@ async function getMangaCover(mangaId) {
 
 // Map strings to MangaDex search requests
 const categoryQueries = {
-  'One Shots': ['One Piece Party', 'One Piece Special'],
-  'Light Novels': ['Ace\'s Story', 'Law\'s Story', 'Hero of the Rocks', 'One Piece Novel']
+  'One Shots': [
+    'Defeat Him! The Pirate Ganzack',
+    'Loguetown Arc',
+    'Sennenryu Legen',
+    'One Piece Party',
+    'One Piece Special',
+    'One Piece Omake'
+  ],
+  'Light Novels': [
+    'Clockwork Island',
+    "Chopper's Kingdom",
+    'Dead End Adventure',
+    'The Cursed Holy Sword',
+    'Baron Omatsuri',
+    'The Giant Mechanical Soldier of Karakuri Castle',
+    'Episode of Alabasta',
+    'Episode of Chopper Plus',
+    'Film: Strong World',
+    '3D: Straw Hat Chase',
+    'Film: Z',
+    'Film: Gold',
+    'Stampede',
+    'Film: Red',
+    'Straw Hat Stories',
+    'Novel A',
+    'Novel Law',
+    'Novel HEROINES',
+    'Novel ODYSSEY',
+    'Hour of Kikoku',
+    'Novel ZORO'
+  ]
 };
 
 async function syncMangaDex() {
@@ -67,6 +96,7 @@ async function syncMangaDex() {
             title: ch.attributes.title || `Chapter ${ch.attributes.chapter || '?'}`,
             volume: ch.attributes.volume,
             chapter: ch.attributes.chapter,
+            externalUrl: ch.attributes.externalUrl || null,
             category: category,
             coverImage: mainMangaCover || '', // MangaDex doesn't have page level covers easily, use manga cover
             publishAt: new Date(ch.attributes.publishAt)
@@ -92,8 +122,15 @@ async function syncMangaDex() {
           await delay(500);
 
           for (const manga of searchRes.data.data) {
-            // Check if title actually contains 'One Piece' or the query roughly to avoid random matches
-            const title = manga.attributes.title.en || Object.values(manga.attributes.title)[0];
+            // Strict checking: see if the returned title includes the query string to avoid random matches
+            const title = manga.attributes.title.en || Object.values(manga.attributes.title)[0] || '';
+            const tLow = title.toLowerCase();
+            const qLow = query.toLowerCase();
+            
+            // Allow if title explicitly contains the query string, OR includes 'one piece' and 'ace', etc.
+            if (!tLow.includes(qLow) && !tLow.includes('piece') && !tLow.includes('ace') && !tLow.includes('law')) {
+               continue; // strictly skip non-related manga
+            }
             
             const cover = await getMangaCover(manga.id);
             await delay(500);
@@ -112,6 +149,7 @@ async function syncMangaDex() {
                   title: `${title} - ${ch.attributes.title || ('Chapter ' + (ch.attributes.chapter||'?'))}`,
                   volume: ch.attributes.volume,
                   chapter: ch.attributes.chapter,
+                  externalUrl: ch.attributes.externalUrl || null,
                   category: catName,
                   coverImage: cover || '',
                   publishAt: new Date(ch.attributes.publishAt)

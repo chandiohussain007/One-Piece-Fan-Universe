@@ -16,9 +16,7 @@ const Footer = () => {
 
           {/* BRAND */}
           <div>
-            <h2 className="text-2xl font-extrabold bg-gradient-to-r from-purple-400 to-pink-500 text-transparent bg-clip-text">
-              NEON_HORIZON
-            </h2>
+            <img src="/images/logo.png" alt="One Piece Fan Universe" className="h-10 mb-4" />
 
             <p className="text-gray-400 mt-4 text-sm leading-relaxed">
               Elevating the anime experience through cinematic design and 
@@ -77,9 +75,14 @@ const Footer = () => {
         {/* BOTTOM */}
         <div className="flex flex-col md:flex-row justify-between items-center text-gray-500 text-xs gap-4">
 
-          <p>
-            © 2026 NEON_HORIZON ENTERTAINMENT. ALL RIGHTS RESERVED.
-          </p>
+          <div className="flex flex-col gap-1">
+            <p>
+              © 2026 ONE PIECE FAN UNIVERSE. ALL RIGHTS RESERVED.
+            </p>
+            <p className="text-gray-600 flex items-center gap-1">
+              Data synchronized via <img src="https://mangadex.org/favicon.ico" alt="MangaDex" className="h-3 w-3 inline-block grayscale opacity-70" /> MangaDex API.
+            </p>
+          </div>
 
           <div className="flex gap-6">
             <Link className="hover:text-white transition" to="#">Privacy Policy</Link>

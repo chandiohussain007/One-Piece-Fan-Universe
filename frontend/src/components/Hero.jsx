@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import toast from 'react-hot-toast'
 
-const Hero = () => {
+const Hero = ({ latestChapters = [] }) => {
   return (
     <section className="relative min-h-screen bg-black text-white overflow-hidden">
 
@@ -26,29 +27,29 @@ const Hero = () => {
         <div className="max-w-xl">
 
           <h4 className="text-purple-400 uppercase tracking-widest mb-4 text-sm">
-            The Horizon Awaits
+            Sail Beyond the Horizon
           </h4>
 
           <h1 className="text-5xl md:text-6xl font-extrabold leading-tight mb-6">
             Welcome to the <br />
             <span className="bg-gradient-to-r from-purple-400 to-pink-500 text-transparent bg-clip-text">
-              Anime Universe
+              One Piece Fan Universe
             </span>
           </h1>
 
           <p className="text-gray-300 text-lg mb-8">
-            Step into a world where high-fidelity art meets cinematic storytelling. 
-            Experience the next generation of manga and fan culture.
+            Immerse yourself in epic storytelling, powerful characters, and a universe driven by dreams, freedom, and adventure.
           </p>
 
           {/* BUTTONS */}
           <div className="flex gap-4 flex-wrap">
 
-            <Link to="/explore">
-              <button className="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 font-semibold hover:scale-105 transition duration-300 shadow-lg shadow-purple-500/30">
-                Explore the Multiverse
-              </button>
-            </Link>
+            <button 
+              onClick={() => toast('Universe Mapping Commencing Soon!')}
+              className="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 font-semibold hover:scale-105 transition duration-300 shadow-lg shadow-purple-500/30"
+            >
+              Explore the Multiverse
+            </button>
 
             <button className="px-6 py-3 rounded-xl border border-white/20 backdrop-blur-md hover:bg-white/10 transition duration-300">
               ▶ Watch Trailer
@@ -67,18 +68,15 @@ const Hero = () => {
             </h3>
 
             <ul className="space-y-2 text-gray-300 text-sm">
-              <li className="hover:text-white transition">
-                <Link to="">One Piece Manga Chapter 1100</Link>
-              </li>
-              <li className="hover:text-white transition">
-                <Link to="">One Piece Movie: Red</Link>
-              </li>
-              <li className="hover:text-white transition">
-                <Link to="">Latest One Piece Episode</Link>
-              </li>
-              <li className="hover:text-white transition">
-                <Link to="">One Piece Official Merch</Link>
-              </li>
+              {latestChapters.length > 0 ? (
+                latestChapters.slice(0, 5).map(ch => (
+                  <li key={ch._id} className="hover:text-white transition line-clamp-1">
+                    <Link to={`/manga/${ch.mangaDexChapterId}`}>{ch.title}</Link>
+                  </li>
+                ))
+              ) : (
+                <li className="text-gray-500 italic">Syncing universe...</li>
+              )}
             </ul>
 
           </div>

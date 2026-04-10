@@ -1,250 +1,182 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import api from '../services/api'
-import { FaArrowLeft, FaExternalLinkAlt, FaBookOpen } from 'react-icons/fa'
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
+import { FaArrowLeft, FaChevronLeft, FaChevronRight } from 'react-icons/fa'
+import toast from 'react-hot-toast'
+import SEO from '../components/SEO'
 
 const MangaReaderPage = () => {
   const { id } = useParams()
   const [chapter, setChapter] = useState(null)
+  
+  const [pages, setPages] = useState([])
+  const [currentPage, setCurrentPage] = useState(0)
   const [loading, setLoading] = useState(true)
-  const [iframeError, setIframeError] = useState(false)
+  const [baseUrl, setBaseUrl] = useState('')
+  const [hash, setHash] = useState('')
 
   useEffect(() => {
-    fetchChapter()
+    fetchChapterData()
   }, [id])
 
-  const fetchChapter = async () => {
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowRight') nextPage()
+      if (e.key === 'ArrowLeft') prevPage()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [currentPage, pages])
+
+  const fetchChapterData = async () => {
+    setLoading(true)
     try {
       const { data } = await api.get(`/manga/${id}`)
       setChapter(data)
+
+      // If it's an official simulpub chapter, don't ping MangaDex home server
+      if (data.externalUrl) {
+        setLoading(false)
+        return
+      }
+
+      const mdRes = await fetch(`https://api.mangadex.org/at-home/server/${id}`)
+      if (!mdRes.ok) throw new Error('Failed to fetch MangaDex images')
+      
+      const mdData = await mdRes.json()
+      setBaseUrl(mdData.baseUrl)
+      setHash(mdData.chapter.hash)
+      setPages(mdData.chapter.data)
+      setCurrentPage(0)
+
     } catch (error) {
       console.error('Error fetching chapter:', error)
+      toast.error('Could not load chapter pages.')
     } finally {
       setLoading(false)
     }
   }
 
-  const resolveUrl = (url) => {
-    if (!url) return ''
-    return url.startsWith('http') ? url : `${API_BASE}${url}`
+  const nextPage = () => {
+    if (currentPage < pages.length - 1) setCurrentPage(p => p + 1)
   }
 
-  const renderContent = () => {
-    if (!chapter) return null
-
-    switch (chapter.type) {
-
-      // ── EXTERNAL LINK ──
-      case 'link':
-        return (
-          <div className="reader-section">
-            <div className="external-info">
-              <p>External Manga Reader</p>
-              <a href={chapter.externalLink} target="_blank" rel="noopener noreferrer">
-                Open full manga <FaExternalLinkAlt />
-              </a>
-            </div>
-
-            {!iframeError && (
-              <iframe
-                src={chapter.externalLink}
-                title={chapter.title}
-                className="external-iframe"
-                sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                onError={() => setIframeError(true)}
-              />
-            )}
-
-            {iframeError && (
-              <p className="error-text">
-                This site may block embedding. Use the "Open full manga" button above.
-              </p>
-            )}
-          </div>
-        )
-
-      // ── HTML EMBED ──
-      case 'html':
-        return (
-          <div className="reader-section">
-            <p>Embedded manga reader:</p>
-            <iframe
-              srcDoc={chapter.htmlEmbed}
-              title={chapter.title}
-              className="embed-iframe"
-              sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-presentation"
-            />
-          </div>
-        )
-
-      // ── UPLOADED IMAGES & PDFs ──
-      case 'upload':
-        if (!chapter.contentFiles || chapter.contentFiles.length === 0) {
-          return <p className="error-text">No files uploaded for this chapter.</p>
-        }
-        return (
-          <div className="reader-section multi-page">
-            {chapter.contentFiles.map((file, idx) => {
-              const fileUrl = typeof file === 'string' ? file : file.url
-              const fileType = typeof file === 'string'
-                ? fileUrl.toLowerCase().endsWith('.pdf') ? 'pdf' : 'image'
-                : file.fileType
-
-              if (fileType === 'pdf') {
-                return (
-                  <div key={idx} className="pdf-wrapper">
-                    <div className="pdf-header">
-                      <span>📄 PDF Page {idx + 1}</span>
-                      <a href={resolveUrl(fileUrl)} target="_blank" rel="noopener noreferrer">
-                        Open full <FaExternalLinkAlt />
-                      </a>
-                    </div>
-                    <embed
-                      src={resolveUrl(fileUrl)}
-                      type="application/pdf"
-                      className="pdf-embed"
-                    />
-                  </div>
-                )
-              }
-
-              return (
-                <img
-                  key={idx}
-                  src={resolveUrl(fileUrl)}
-                  alt={`Page ${idx + 1}`}
-                  loading="lazy"
-                  className="manga-page"
-                />
-              )
-            })}
-          </div>
-        )
-
-      // ── SINGLE PDF ──
-      case 'pdf':
-        const pdfUrl = resolveUrl(chapter.externalLink || chapter.contentFiles?.[0]?.url)
-        return (
-          <div className="reader-section">
-            <div className="pdf-header">
-              <span>📄 PDF Reader</span>
-              <a href={pdfUrl} target="_blank" rel="noopener noreferrer">
-                Open full <FaExternalLinkAlt />
-              </a>
-            </div>
-            <embed src={pdfUrl} type="application/pdf" className="pdf-embed" />
-          </div>
-        )
-
-      default:
-        return (
-          <div className="reader-section empty-state">
-            <FaBookOpen />
-            <p>No content available for this chapter.</p>
-          </div>
-        )
-    }
+  const prevPage = () => {
+    if (currentPage > 0) setCurrentPage(p => p - 1)
   }
 
   if (loading) {
     return (
-      <div className="page-loader">
-        <div className="spinner"></div>
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     )
   }
 
-  if (!chapter) {
+  // Intercept Simulpub external URL early
+  if (chapter?.externalUrl) {
     return (
-      <div className="empty-state">
-        <p>Chapter not found</p>
-        <Link to="/manga" className="back-link">← Back to Library</Link>
+      <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center justify-center p-6 text-center">
+        <div className="bg-white/5 border border-white/10 p-10 rounded-3xl max-w-lg shadow-2xl">
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-red-500 to-orange-500 text-transparent bg-clip-text mb-4">
+            Official Release
+          </h2>
+          <p className="text-gray-300 mb-8 leading-relaxed">
+            Because this chapter is an official simulpub, MangaDex does not host the images directly. 
+            You must read it legally on the official publishing platform linked below!
+          </p>
+          <a 
+            href={chapter.externalUrl} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-block bg-white text-black font-bold px-8 py-3 rounded-full hover:scale-105 transition shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+          >
+            Read on Official Platform ↗
+          </a>
+          <div className="mt-8">
+            <Link to="/manga" className="text-gray-500 hover:text-white transition underline flex items-center gap-2 justify-center">
+              <FaArrowLeft /> Back to Library
+            </Link>
+          </div>
+        </div>
       </div>
     )
   }
+
+  if (!chapter || !pages.length) {
+    return (
+      <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center justify-center p-6 text-center">
+        <h2 className="text-2xl mb-4 text-red-400">Chapter Content Unavailable</h2>
+        <p className="text-gray-500 mb-6">MangaDex servers might be down or heavily delayed.</p>
+        <Link to="/manga" className="text-purple-400 underline flex items-center gap-2">
+          <FaArrowLeft /> Back to Library
+        </Link>
+      </div>
+    )
+  }
+
+  const imageUrl = `${baseUrl}/data/${hash}/${pages[currentPage]}`
 
   return (
-    <div className="manga-reader-page">
-      {/* Top Bar */}
-      <div className="reader-topbar">
-        <Link to="/manga" className="back-link">
-          <FaArrowLeft /> Back
+    <div className="min-h-screen bg-[#0a0a0a] text-gray-200 font-sans flex flex-col">
+      <SEO 
+        title={chapter ? `Read ${chapter.title}` : 'Reading Manga'}
+        description={chapter ? `Read ${chapter.title} ${chapter.chapter ? `Chapter ${chapter.chapter}` : ''} legally or via fanscans on the One Piece Fan Universe.` : 'Read Manga Online'}
+        keywords={`One Piece ${chapter?.chapter ? `Chapter ${chapter.chapter}` : ''}, ${chapter?.title}, Read Manga Online`}
+        image={chapter?.coverImage}
+      />
+      {/* Top Navbar */}
+      <div className="sticky top-0 z-50 bg-[#111] border-b border-[#222] p-4 flex justify-between items-center shadow-lg">
+        <Link to="/manga" className="text-gray-400 hover:text-white flex items-center gap-2 transition-colors">
+          <FaArrowLeft /> <span className="hidden sm:inline">Library</span>
         </Link>
-        <div className="chapter-info">
-          {chapter.animeName && <span>{chapter.animeName} • </span>}
-          <span>{chapter.title}</span>
+        <div className="text-center truncate px-4">
+          <h1 className="font-bold text-gray-100 truncate text-sm sm:text-base">
+            {chapter.title}
+          </h1>
+          <p className="text-xs text-gray-500 mt-1">
+            {chapter.volume && `Vol. ${chapter.volume}`} {chapter.chapter && `Ch. ${chapter.chapter}`}
+          </p>
         </div>
-        <span className="views-count">{chapter.views} views</span>
-      </div>
-
-      {/* Chapter Content */}
-      <div className="reader-content">
-        <div className="chapter-header">
-          <h1>{chapter.title}</h1>
-          {chapter.description && <p>{chapter.description}</p>}
-        </div>
-
-        {renderContent()}
-
-        {/* Bottom Navigation */}
-        <div className="reader-bottom-nav">
-          <Link to="/manga" className="back-link">
-            <FaArrowLeft /> Back to Library
-          </Link>
+        <div className="text-sm font-mono text-gray-400 bg-gray-800 px-3 py-1 rounded">
+          {currentPage + 1} / {pages.length}
         </div>
       </div>
 
-      {/* Styles (can move to CSS/SCSS file) */}
-      <style jsx="true">{`
-        .manga-reader-page {
-          background: #0d0d0d;
-          color: #f5f5f5;
-          min-height: 100vh;
-          padding: 1rem 2rem;
-          font-family: 'Arial', sans-serif;
-        }
-        .reader-topbar {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 1rem;
-          border-bottom: 1px solid #222;
-          padding-bottom: 0.5rem;
-        }
-        .back-link {
-          color: #ff4d6d;
-          text-decoration: none;
-          font-weight: bold;
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-        }
-        .back-link:hover { color: #ff85a2; }
-        .chapter-info {
-          font-weight: bold;
-          font-size: 1.1rem;
-        }
-        .views-count { color: #888; font-size: 0.9rem; }
-        .reader-content { margin-top: 1rem; }
-        .chapter-header h1 { font-size: 2rem; margin-bottom: 0.25rem; color: #ff4d6d; }
-        .chapter-header p { font-size: 1rem; color: #bbb; }
-        .reader-section { margin-top: 2rem; }
-        .external-info, .pdf-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
-        .external-info a, .pdf-header a { color: #ff85a2; text-decoration: none; font-weight: bold; }
-        .external-info a:hover, .pdf-header a:hover { color: #ff4d6d; }
-        .external-iframe, .embed-iframe { width: 100%; height: 600px; border: none; border-radius: 0.25rem; background: #000; }
-        .multi-page { display: flex; flex-direction: column; gap: 1.5rem; }
-        .manga-page { width: 100%; max-width: 100%; border-radius: 0.25rem; box-shadow: 0 0 15px rgba(255,77,109,0.2); }
-        .pdf-embed { width: 100%; height: 800px; border-radius: 0.25rem; background: #000; }
-        .error-text { color: #ff4d6d; margin-top: 0.5rem; font-style: italic; }
-        .reader-bottom-nav { margin-top: 3rem; border-top: 1px solid #222; padding-top: 1rem; }
-        .empty-state { text-align: center; color: #888; margin-top: 5rem; }
-        .page-loader { display: flex; justify-content: center; align-items: center; height: 50vh; }
-        .spinner { width: 50px; height: 50px; border: 6px solid #222; border-top-color: #ff4d6d; border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-      `}</style>
+      {/* Reader Content */}
+      <div className="flex-1 flex flex-col items-center justify-center py-6 px-2 sm:px-4 relative group">
+        <div className="absolute top-0 left-0 w-[45%] h-full z-10 cursor-w-resize" onClick={prevPage}></div>
+        <div className="absolute top-0 right-0 w-[45%] h-full z-10 cursor-e-resize" onClick={nextPage}></div>
+
+        <div className="relative z-20 max-w-5xl w-full flex justify-center shadow-2xl rounded">
+          {/* Use key to remount the image tag, ensuring gif/loading states trigger cleanly */}
+          <img 
+            key={imageUrl}
+            src={imageUrl} 
+            alt={`Page ${currentPage + 1}`} 
+            className="w-full sm:w-auto sm:max-h-[85vh] object-contain pointer-events-none bg-[#111]"
+            loading="lazy"
+          />
+        </div>
+      </div>
+
+      {/* Bottom Controls */}
+      <div className="sticky bottom-0 z-50 bg-[#111] border-t border-[#222] p-4 flex justify-center gap-8 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+        <button 
+          onClick={prevPage} 
+          disabled={currentPage === 0}
+          className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 disabled:opacity-30 disabled:hover:bg-gray-800 px-6 py-2 rounded transition-colors"
+        >
+          <FaChevronLeft /> Prev
+        </button>
+        <button 
+          onClick={nextPage} 
+          disabled={currentPage === pages.length - 1}
+          className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 disabled:opacity-30 disabled:hover:bg-purple-600 px-6 py-2 border-b-4 border-purple-800 rounded transition-colors text-white"
+        >
+          Next <FaChevronRight />
+        </button>
+      </div>
     </div>
   )
 }

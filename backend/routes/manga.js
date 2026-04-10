@@ -8,9 +8,13 @@ const router = express.Router();
 // Get all chapters filtered by category
 router.get('/', async (req, res) => {
   try {
-    const { category, limit = 50, page = 1 } = req.query;
+    const { category, limit = 50, page = 1, search } = req.query;
     let query = {};
     if (category) query.category = category;
+    
+    if (search) {
+      query.title = { $regex: search, $options: 'i' };
+    }
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
     

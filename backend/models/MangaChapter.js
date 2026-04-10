@@ -23,6 +23,10 @@ const mangaChapterSchema = new mongoose.Schema({
     type: String,
     default: null
   },
+  externalUrl: {
+    type: String,
+    default: null
+  },
   category: {
     type: String,
     enum: ['Manga', 'One Shots', 'Light Novels'],

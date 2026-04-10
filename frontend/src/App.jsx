@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import AdminRoute from './components/AdminRoute'
 import Navbar from './components/Navbar'
+import { HelmetProvider } from 'react-helmet-async'
 
 // Pages
 import LandingPage from './pages/LandingPage'
@@ -18,7 +19,8 @@ import Register from './pages/Register'
 
 function App() {
   return (
-    <AuthProvider>
+    <HelmetProvider>
+      <AuthProvider>
       <Toaster
         position="top-right"
         toastOptions={{
@@ -58,7 +60,8 @@ function App() {
         </main>
 
       </div>
-    </AuthProvider>
+      </AuthProvider>
+    </HelmetProvider>
   )
 }
 export default App

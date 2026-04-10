@@ -15,6 +15,7 @@ const commentRoutes = require('./routes/comment');
 const adminRoutes = require('./routes/admin');
 const uploadRoutes = require('./routes/upload');
 const linkPreviewRoutes = require('./routes/linkPreview');
+const { syncMangaDex } = require('./utils/mangadexSync');
 
 const app = express();
 
@@ -37,9 +38,25 @@ app.use('/api', limiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// CORS - allow your frontend only
+// CORS - allow your frontend and localhost 
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  'http://localhost:5173',
+  'http://localhost:3000'
+];
+
 app.use(cors({
-  origin: process.env.CLIENT_URL, // read from env
+  origin: function(origin, callback) {
+    // allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      if (process.env.NODE_ENV === 'development') {
+        return callback(null, true); // Permissive in dev
+      }
+      return callback(null, false); // Just return false instead of throwing error to prevent crash
+    }
+    return callback(null, true);
+  },
   credentials: true
 }));
 
@@ -76,7 +93,17 @@ app.use((err, req, res, next) => {
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('Connected to MongoDB'))
+  .then(() => {
+    console.log('Connected to MongoDB');
+    // Start initial sync and then every 6 hours (21600000 ms)
+    setTimeout(() => {
+      syncMangaDex().catch(err => console.error("Initial sync failed:", err));
+    }, 5000); // Wait 5 seconds after boot to sync
+    
+    setInterval(() => {
+      syncMangaDex().catch(err => console.error("Scheduled sync failed:", err));
+    }, 6 * 60 * 60 * 1000);
+  })
   .catch(err => console.error('MongoDB connection error:', err));
 
 // Dynamic port for Render

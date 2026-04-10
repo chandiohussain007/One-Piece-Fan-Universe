@@ -1,29 +1,26 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../services/api'
-import { FaBookOpen, FaLink, FaCode, FaFilePdf, FaEye, FaSearch } from 'react-icons/fa'
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
+import { FaBookOpen, FaEye, FaSearch } from 'react-icons/fa'
+import SEO from '../components/SEO'
 
 const MangaPage = () => {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
-  const [groupedByAnime, setGroupedByAnime] = useState({})
+  const [activeTab, setActiveTab] = useState('Manga')
+  const [chapters, setChapters] = useState([])
+
+  const tabs = ['Manga', 'One Shots', 'Light Novels']
 
   useEffect(() => {
     fetchChapters()
-  }, [])
+  }, [activeTab])
 
   const fetchChapters = async () => {
+    setLoading(true)
     try {
-      const { data } = await api.get('/manga')
-      const groups = data.reduce((acc, ch) => {
-        const key = ch.animeName || 'Standalone Chapters'
-        if (!acc[key]) acc[key] = []
-        acc[key].push(ch)
-        return acc
-      }, {})
-      setGroupedByAnime(groups)
+      const { data } = await api.get(`/manga?category=${activeTab}&limit=500`)
+      setChapters(data.chapters || [])
     } catch (error) {
       console.error('Error fetching chapters:', error)
     } finally {
@@ -31,154 +28,127 @@ const MangaPage = () => {
     }
   }
 
-  const getTypeIcon = (type) => {
-    switch (type) {
-      case 'pdf': return <FaFilePdf />
-      case 'link': return <FaLink />
-      case 'html': return <FaCode />
-      default: return <FaBookOpen />
-    }
-  }
-
-  const getTypeLabel = (type) => {
-    switch (type) {
-      case 'pdf': return 'PDF'
-      case 'link': return 'External'
-      case 'html': return 'Embedded'
-      case 'upload': return 'Images'
-      default: return type
-    }
-  }
-
-  const filteredGroups = Object.entries(groupedByAnime).reduce((acc, [anime, chs]) => {
-    const filtered = chs.filter(ch =>
-      ch.title.toLowerCase().includes(search.toLowerCase()) ||
-      anime.toLowerCase().includes(search.toLowerCase())
-    )
-    if (filtered.length > 0) acc[anime] = filtered
-    return acc
-  }, {})
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center text-gray-400">
-        <p className="animate-pulse">Loading manga library...</p>
-      </div>
-    )
-  }
+  const filteredChapters = chapters.filter(ch =>
+    ch.title.toLowerCase().includes(search.toLowerCase()) ||
+    (ch.chapter && ch.chapter.toLowerCase().includes(search.toLowerCase()))
+  )
 
   return (
     <div className="bg-black text-white min-h-screen px-4 md:px-6 py-12 relative overflow-hidden">
-
+      <SEO 
+        title={`${activeTab} Library`}
+        description={`Read the latest One Piece ${activeTab.toLowerCase()} directly from our high-speed MangaDex synchronized library. Explore official releases and spin-offs.`}
+        keywords={`One Piece ${activeTab}, Read Manga Online, One Piece Fan Universe`}
+      />
       {/* Neon Glow */}
       <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] bg-purple-600 opacity-20 blur-[120px] rounded-full"></div>
       <div className="absolute bottom-[-100px] right-[-100px] w-[300px] h-[300px] bg-pink-600 opacity-20 blur-[120px] rounded-full"></div>
 
       <div className="relative max-w-7xl mx-auto">
-
         {/* HEADER */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <h1 className="text-4xl md:text-6xl font-extrabold mb-4">
-            Manga <span className="bg-gradient-to-r from-purple-400 to-pink-500 text-transparent bg-clip-text">Library</span>
+             <span className="bg-gradient-to-r from-purple-400 to-pink-500 text-transparent bg-clip-text">One Piece</span> Manga
           </h1>
-          <p className="text-gray-400 max-w-xl mx-auto">
-            Read the latest releases — high quality scans, PDFs, and embedded viewing.
+          <p className="text-gray-400 max-w-xl mx-auto mb-8">
+            Read the latest One Piece chapters directly from our high-speed MangaDex synchronized library.
           </p>
 
-          {/* SEARCH */}
-          <div className="mt-8 max-w-lg mx-auto relative">
-            <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-            <input
-              type="text"
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              placeholder="Search manga or chapter..."
-              className="w-full pl-12 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/30 outline-none backdrop-blur-md"
-            />
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 max-w-2xl mx-auto">
+            {/* TABS */}
+            <div className="flex bg-gray-900 rounded-full p-1 border border-gray-800 w-full md:w-auto">
+              {tabs.map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`flex-1 md:px-6 py-2 rounded-full text-sm font-semibold transition-all ${
+                    activeTab === tab
+                      ? 'bg-purple-600 shadow-md text-white'
+                      : 'text-gray-400 hover:text-gray-200'
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
+
+            {/* SEARCH */}
+            <div className="relative w-full md:w-64">
+              <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                placeholder="Search..."
+                className="w-full pl-12 pr-4 py-2 rounded-full bg-gray-900 border border-gray-800 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none text-sm"
+              />
+            </div>
           </div>
         </div>
 
-        {/* EMPTY STATE */}
-        {Object.keys(filteredGroups).length === 0 ? (
-          <div className="text-center text-gray-400 mt-20">
+        {/* LOADING OR CONTENT */}
+        {loading ? (
+          <div className="text-center text-gray-400 py-20">
+            <p className="animate-pulse">Loading {activeTab}...</p>
+          </div>
+        ) : filteredChapters.length === 0 ? (
+          <div className="text-center text-gray-500 mt-20 p-6 border border-gray-800 rounded-xl bg-gray-900/50">
             <FaBookOpen className="mx-auto text-4xl mb-4 opacity-50" />
-            <p>No manga found.</p>
+            <p>No chapters found for {activeTab}.</p>
           </div>
         ) : (
-          Object.entries(filteredGroups).map(([animeName, chs]) => (
-            <div key={animeName} className="mb-16">
-
-              {/* GROUP HEADER */}
-              <h2 className="text-2xl font-bold mb-6 border-l-4 border-purple-500 pl-4">
-                {animeName}
-              </h2>
-
-              {/* GRID: responsive fire layout */}
-              <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-                {chs.map((chapter, idx) => (
-                  <Link
-                    key={chapter._id}
-                    to={`/manga/${chapter._id}`}
-                    className="group bg-white/5 border border-white/10 backdrop-blur-lg rounded-xl overflow-hidden hover:bg-white/10 transition duration-300 hover:-translate-y-1"
-                    style={{ animationDelay: `${0.1 * idx}s` }}
-                  >
-
-                    {/* IMAGE */}
-                    <div className="relative h-48 overflow-hidden">
-                      {chapter.coverImage ? (
-                        <img
-                          src={chapter.coverImage.startsWith('/')
-                            ? `${API_BASE}${chapter.coverImage}`
-                            : chapter.coverImage}
-                          className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-                        />
-                      ) : (
-                        <div className="flex items-center justify-center h-full text-gray-500">
-                          <FaBookOpen />
-                        </div>
-                      )}
-
-                      {/* TYPE BADGE */}
-                      <div className="absolute top-2 left-2 text-xs px-2 py-1 bg-black/70 rounded flex items-center gap-1">
-                        {getTypeIcon(chapter.type)}
-                        {getTypeLabel(chapter.type)}
-                      </div>
-
-                      {/* CHAPTER */}
-                      <div className="absolute bottom-2 right-2 text-xs px-2 py-1 bg-purple-600 rounded">
-                        Ch. {chapter.order || idx + 1}
-                      </div>
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            {filteredChapters.map((chapter) => (
+              <Link
+                key={chapter._id}
+                to={`/manga/${chapter.mangaDexChapterId}`}
+                className="group bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:bg-gray-800 transition duration-300 hover:-translate-y-1"
+              >
+                {/* IMAGE */}
+                <div className="relative h-64 overflow-hidden bg-black">
+                  {chapter.coverImage ? (
+                    <img
+                      src={chapter.coverImage}
+                      alt={chapter.title}
+                      className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center h-full text-gray-700">
+                      <FaBookOpen size={48} />
                     </div>
+                  )}
 
-                    {/* INFO */}
-                    <div className="p-4">
-                      <h3 className="font-semibold line-clamp-1">
-                        {chapter.title}
-                      </h3>
-
-                      {chapter.description && (
-                        <p className="text-xs text-gray-400 mt-1 line-clamp-2">
-                          {chapter.description}
-                        </p>
-                      )}
-
-                      <div className="flex justify-between items-center text-xs text-gray-400 mt-3">
-                        <span className="flex items-center gap-1">
-                          <FaEye /> {chapter.views}
-                        </span>
-                        <span className="text-purple-400">Read →</span>
-                      </div>
+                  {/* CHAPTER BADGE */}
+                  {chapter.chapter && (
+                    <div className="absolute bottom-2 right-2 text-xs font-bold px-2 py-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded text-white shadow-lg">
+                      Ch. {chapter.chapter}
                     </div>
+                  )}
+                  {chapter.volume && (
+                    <div className="absolute top-2 right-2 text-xs font-bold px-2 py-1 bg-black/70 backdrop-blur-sm rounded text-gray-300 border border-gray-700">
+                      Vol. {chapter.volume}
+                    </div>
+                  )}
+                </div>
 
-                  </Link>
-                ))}
-
-              </div>
-            </div>
-          ))
+                {/* INFO */}
+                <div className="p-4">
+                  <h3 className="font-semibold text-gray-200 line-clamp-2 text-sm md:text-base leading-tight">
+                    {chapter.title}
+                  </h3>
+                  
+                  <div className="flex justify-between items-center text-xs text-gray-500 mt-3 pt-3 border-t border-gray-800">
+                    <span className="flex items-center gap-1">
+                      <FaEye /> {chapter.views || 0}
+                    </span>
+                    <span className="text-purple-400 font-medium bg-purple-400/10 px-2 py-1 rounded">Read →</span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
         )}
-
       </div>
     </div>
   )
